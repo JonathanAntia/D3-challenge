@@ -1,5 +1,5 @@
 // Step 1: Set up the chart area: width, height, margins
-const svgWidth = 960,
+const svgWidth = 750,
         svgHeight = 500,
         margin = {
             top: 30,

@@ -75,7 +75,7 @@ d3.csv('assets/data/data.csv').then(function(healthData){
         .enter()
         .append("text")
         .attr('x', d => xScale(d.poverty))
-        .attr('y', d => yScale(d.healthcare))
+        .attr('y', d => yScale(d.healthcare)+3)
         .text(d => d.abbr)
         .classed('stateText', true);
 

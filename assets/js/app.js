@@ -71,13 +71,13 @@ d3.csv('assets/data/data.csv').then(function(healthData){
         //                         .classed('stateText', true);
         // console.log(stateText);
         var circleLabels = chartGroup.selectAll(null)
-        .data(healthData)
-        .enter()
-        .append("text")
-        .attr('x', d => xScale(d.poverty))
-        .attr('y', d => yScale(d.healthcare)+3)
-        .text(d => d.abbr)
-        .classed('stateText', true);
+                                .data(healthData)
+                                .enter()
+                                .append("text")
+                                .attr('x', d => xScale(d.poverty))
+                                .attr('y', d => yScale(d.healthcare)+3)
+                                .text(d => d.abbr)
+                                .classed('stateText', true);
 
 
 

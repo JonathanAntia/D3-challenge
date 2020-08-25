@@ -1,10 +1,11 @@
 // Step 1: Set up the chart area: width, height, margins
-const svgWidth = 750,
-        svgHeight = 500,
-        margin = {
+const svgWidth = 500;
+const svgHeight = 400;
+
+const margin = {
             top: 30,
             bottom: 50,
-            right: 30,
+            right: 26,
             left: 50
         };
 
@@ -13,10 +14,11 @@ const chartHeight = svgHeight - margin.top - margin.bottom;
 
 // Step 2: Create an SVG wrapper. Append g element to hold chart.
 //          Transform to fit within the chart area margins.
-const svg = d3.select('.article')
+const svg = d3.select('#scatter')
                 .append('svg')
                 .attr('width', svgWidth)
-                .attr('height', svgHeight);
+                .attr('height', svgHeight)
+                .classed('chart', true);
 
 const chartGroup = svg.append('g')
                     .attr('transform', `translate(${margin.left}, ${margin.top})`);
@@ -97,3 +99,15 @@ d3.csv('assets/data/data.csv').then(function(healthData){
 }).catch(function(error){
     console.log(error);
 });
+
+// BONUS:
+// 1. Put existing code into an init function
+// 2. Append new text elements to Step 10 for the new axis titles:
+//      Smokers (%) vs Age (Median)
+//      Obese(%) vs Household Income (Median)
+// 3. Parse all the data necessary to numeric
+// 4. Create a click event handling function for the x and y variables
+//      4.a. change color of selection
+//      4.b. return selection value to be used in the circle group
+// 5. Modify the circle group to include conditions depending on user selections
+// 6. Modify the scaling functions to use the user selection 

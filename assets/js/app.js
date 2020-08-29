@@ -135,12 +135,10 @@ leftAxis = d3.axisLeft(yLinearScale);
 
 // Append the axes to the chart group
 let xAxis = chartGroup.append('g')
-        // .classed('active', true)
         .attr('transform', `translate(0, ${chartHeight})`)
         .call(bottomAxis);
 
 let yAxis = chartGroup.append('g')
-        // .classed('active', true)
         .call(leftAxis);
 
 // Create circles
@@ -212,7 +210,7 @@ const yObeseAxisLabel = ylabelGroup.append('text')
         .classed('aText inactive', true)
         .text('Obese (%)');
 
-// update tooltips using the fuction previously defined
+// update tooltips using the function previously defined
 circleGroup = updateToolTip(userSelection,circleGroup);
 
 // Add labels group event listeners
@@ -238,7 +236,7 @@ xlabelsGroup.selectAll('text').on('click', function(){
                 circleGroup = updateToolTip(userSelection, circleGroup);
 
                 // change classes
-                if (userSelection === 'age') {
+                if (userSelection[0] === 'age') {
                         xPovertyAxisLabel
                         .classed('active', false)
                         .classed('inactive', true);
@@ -249,7 +247,7 @@ xlabelsGroup.selectAll('text').on('click', function(){
                         .classed('active', false)
                         .classed('inactive', true);
                 }
-                else if(userSelection === 'income'){
+                else if(userSelection[0] === 'income'){
                         xPovertyAxisLabel
                         .classed('active', false)
                         .classed('inactive', true);
@@ -260,7 +258,7 @@ xlabelsGroup.selectAll('text').on('click', function(){
                         .classed('active', true)
                         .classed('inactive', false);
                 }
-                else{
+                else {
                         xPovertyAxisLabel
                         .classed('active', true)
                         .classed('inactive', false);
@@ -280,23 +278,23 @@ ylabelGroup.selectAll('text').on('click', function(){
                 // replace the first item in the user selection array with value
                 userSelection[1] = value;
 
-                // update xScale for new data
+                // update yScale for new data
                 yLinearScale = yScale(healthData, userSelection);
 
-                // update x axis with transition
+                // update y axis with transition
                 yAxis = renderNewYAxis(yLinearScale, yAxis);
 
-                // update circles with new x values
+                // update circles with new y values
                 circleGroup = renderCircles(circleGroup, xLinearScale, yLinearScale, userSelection);
 
-                // update state text with new x values
+                // update state text with new y values
                 stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
 
                 // updates tooltips with new info
                 circleGroup = updateToolTip(userSelection, circleGroup);
 
                 // change classes
-                if (userSelection === 'smokes') {
+                if (userSelection[1] === 'smokes') {
                         yHealthAxisLabel
                         .classed('active', false)
                         .classed('inactive', true);
@@ -307,7 +305,7 @@ ylabelGroup.selectAll('text').on('click', function(){
                         .classed('active', false)
                         .classed('inactive', true);
                 }
-                else if(userSelection === 'obesity'){
+                else if(userSelection[1] === 'obesity'){
                         yHealthAxisLabel
                         .classed('active', false)
                         .classed('inactive', true);
@@ -318,7 +316,7 @@ ylabelGroup.selectAll('text').on('click', function(){
                         .classed('active', true)
                         .classed('inactive', false);
                 }
-                else{
+                else {
                         yHealthAxisLabel
                         .classed('active', true)
                         .classed('inactive', false);

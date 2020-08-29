@@ -1,4 +1,4 @@
-// Step 1: Set up the chart area: width, height, margins
+// Set up the chart area: width, height, margins
 const svgWidth = 500;
 const svgHeight = 400;
 
@@ -12,8 +12,8 @@ left: 100
 const chartWidth = svgWidth - margin.left - margin.right;
 const chartHeight = svgHeight - margin.top - margin.bottom;
 
-// Step 2: Create an SVG wrapper. Append g element to hold chart.
-//          Transform to fit within the chart area margins.
+// Create an SVG wrapper. Append g element to hold chart.
+// Transform to fit within the chart area margins.
 const svg = d3.select('#scatter')
 .append('svg')
 .attr('width', svgWidth)
@@ -84,10 +84,36 @@ function renderStateLabels (stateText, newXScale, newYScale, userSelection){
         return stateText;
 };
 
-// Step 3: Import data from the csv file
+// create a function to update tooltips
+function updateToolTip(userSelection, circleGroup){
+        const toolTip = d3.tip()
+                .attr('class', 'd3-tip')
+                .offset([10, -60])
+                .html(function(d) {
+                        return (`${d.state}
+                        <br>
+                        ${userSelection[1]}: ${d[userSelection[1]]}
+                        <br>
+                        ${userSelection[0]}: ${d[userSelection[0]]}`);
+                });
+
+        circleGroup.call(toolTip);
+
+        circleGroup.on('mouseover', function(data){
+                toolTip.show(data);
+        });
+
+        circleGroup.on('mouseout', function(data){
+                toolTip.hide(data);
+        });
+
+        return circleGroup;
+}
+
+// Import data from the csv file
 d3.csv('assets/data/data.csv').then(function(healthData){
 
-// Step 4: Parse the data and convert to numerical
+// Parse the data and convert to numerical
 healthData.forEach(d => {
    d.poverty = +d.poverty;
    d.healthcare = +d.healthcare;
@@ -98,16 +124,16 @@ healthData.forEach(d => {
 });
 
 
-// Step 5: Create linear scaling functions for x and y
+// Create linear scaling functions for x and y
 let xLinearScale = xScale(healthData,userSelection);
 
 let yLinearScale = yScale(healthData,userSelection);
 
-// Step 6: Create axes functions
+// Create axes functions
 const bottomAxis = d3.axisBottom(xLinearScale),
 leftAxis = d3.axisLeft(yLinearScale);
 
-// Step 7: Append the axes to the chart group
+// Append the axes to the chart group
 let xAxis = chartGroup.append('g')
         // .classed('active', true)
         .attr('transform', `translate(0, ${chartHeight})`)
@@ -117,7 +143,7 @@ let yAxis = chartGroup.append('g')
         // .classed('active', true)
         .call(leftAxis);
 
-// Step 8: Create circles
+// Create circles
 let circleGroup = chartGroup.selectAll('circle')
         .data(healthData)
         .enter()
@@ -127,7 +153,7 @@ let circleGroup = chartGroup.selectAll('circle')
         .attr('r', '10')
         .classed('stateCircle', true);
 
-// Step 9: Include state abbreviations in the circles
+// Include state abbreviations in the circles
 let stateText = chartGroup.selectAll('stateText')
         .data(healthData)
         .enter()
@@ -137,7 +163,7 @@ let stateText = chartGroup.selectAll('stateText')
         .text(d => d.abbr)
         .classed('stateText', true);
 
-// Step 10: Create axes labels
+// Create axes labels
 const xlabelsGroup = chartGroup.append('g')
         .attr('transform', `translate(${chartWidth/2},${chartHeight + margin.top + 10})`)
 
@@ -186,7 +212,10 @@ const yObeseAxisLabel = ylabelGroup.append('text')
         .classed('aText inactive', true)
         .text('Obese (%)');
 
-// Step 11: Add labels group event listeners
+// update tooltips using the fuction previously defined
+circleGroup = updateToolTip(userSelection,circleGroup);
+
+// Add labels group event listeners
 xlabelsGroup.selectAll('text').on('click', function(){
         const value = d3.select(this).attr('value');
         if (value !== userSelection[0]){
@@ -204,6 +233,9 @@ xlabelsGroup.selectAll('text').on('click', function(){
 
                 // update state text with new x values
                 stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
+                
+                // updates tooltips with new info
+                circleGroup = updateToolTip(userSelection, circleGroup);
 
                 // change classes
                 if (userSelection === 'age') {
@@ -260,6 +292,9 @@ ylabelGroup.selectAll('text').on('click', function(){
                 // update state text with new x values
                 stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
 
+                // updates tooltips with new info
+                circleGroup = updateToolTip(userSelection, circleGroup);
+
                 // change classes
                 if (userSelection === 'smokes') {
                         yHealthAxisLabel
@@ -300,14 +335,3 @@ ylabelGroup.selectAll('text').on('click', function(){
 }).catch(function(error){
 console.log(error);
 });
-
-
-// BONUS:
-// 4. Create a click event handling function for the x and y variables
-//      4.a. change color of selection
-//      4.b. return selection value to be used in the circle group
-// 5. Modify the circle group to include conditions depending on user selections
-// 6. Modify the scaling functions to use the user selection 
-
-// create an event handling function that appends the selected axis to an array
-// use the elements in the array to modify the chart

@@ -69,17 +69,20 @@ function renderCircles (circleGroup, newXScale, newYScale, userSelection){
         .attr('cx', d => newXScale(d[userSelection[0]]))
         .attr('cy', d => newYScale(d[userSelection[1]]))
         .attr('r', '10');
+
+        return circleGroup;
 };
 
 // create a function to modify the state labels based on user selection
-// function renderStateLabels (stateText, newXScale, newYScale, userSelection){
-//         stateText.transition()
-//         .duration(1000)
-//         .attr('x', d => newXScale(d[userSelection[0]]))
-//         .attr('y', d => newYScale(d[userSelection[1]]))
-//         .text(d => d.abbr)
-//         .classed('stateText', true);
-// };
+function renderStateLabels (stateText, newXScale, newYScale, userSelection){
+        stateText.transition()
+        .duration(1000)
+        .attr('x', d => newXScale(d[userSelection[0]]))
+        .attr('y', d => newYScale(d[userSelection[1]])+3)
+        .text(d => d.abbr);
+
+        return stateText;
+};
 
 // Step 3: Import data from the csv file
 d3.csv('assets/data/data.csv').then(function(healthData){
@@ -200,7 +203,7 @@ xlabelsGroup.selectAll('text').on('click', function(){
                 circleGroup = renderCircles(circleGroup, xLinearScale, yLinearScale, userSelection);
 
                 // update state text with new x values
-                // stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
+                stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
 
                 // change classes
                 if (userSelection === 'age') {
@@ -255,7 +258,7 @@ ylabelGroup.selectAll('text').on('click', function(){
                 circleGroup = renderCircles(circleGroup, xLinearScale, yLinearScale, userSelection);
 
                 // update state text with new x values
-                // stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
+                stateText = renderStateLabels(stateText, xLinearScale, yLinearScale, userSelection);
 
                 // change classes
                 if (userSelection === 'smokes') {
